@@ -1,0 +1,213 @@
+{
+	"info": {
+		"_postman_id": "d4161a79-6af5-4425-ae13-8bdb4b03b03b",
+		"name": "Liste d'épicerie",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19876386"
+	},
+	"item": [
+		{
+			"name": "/liste_epicerie",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Statut de réponse 200 OK ou 500 Erreur interne du serveur\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 500]);\r",
+							"});\r",
+							"\r",
+							"if (pm.response.code === 200) {\r",
+							"    pm.test(\"Type de contenu est application/json\", function () {\r",
+							"        pm.response.to.have.header(\"Content-Type\");\r",
+							"        pm.expect(pm.response.headers.get(\"Content-Type\")).to.match(/^application\\/json(?:;\\s*charset=utf-8)?$/i);\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Réponse est un tableau\", function () {\r",
+							"        const jsonData = pm.response.json();\r",
+							"        pm.expect(jsonData).to.be.an(\"array\");\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Chaque élément a des liens HATEOAS\", function () {\r",
+							"        const jsonData = pm.response.json();\r",
+							"        jsonData.forEach(item => {\r",
+							"            pm.expect(item).to.have.property(\"links\");\r",
+							"            pm.expect(item.links).to.have.property(\"self\");\r",
+							"            pm.expect(item.links).to.have.property(\"delete\");\r",
+							"        });\r",
+							"    })\r",
+							"    } else if (pm.response.code === 500) {\r",
+							"        pm.test(\"Message d'erreur lors de la lecture du fichier de données\", function () {\r",
+							"            pm.expect(pm.response.text()).to.equal(\"Erreur lors de la lecture du fichier de données\");\r",
+							"        });\r",
+							"    }\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url_base}}/liste_epicerie",
+					"host": [
+						"{{url_base}}"
+					],
+					"path": [
+						"liste_epicerie"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/liste_epicerie/:id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Statut de réponse 200 OK, 404 Non trouvé ou 500 Erreur interne du serveur\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 404, 500]);\r",
+							"});\r",
+							"\r",
+							"if (pm.response.code === 200) {\r",
+							"    pm.test(\"Type de contenu est application/json\", function () {\r",
+							"        pm.response.to.have.header(\"Content-Type\");\r",
+							"        pm.expect(pm.response.headers.get(\"Content-Type\")).to.match(/^application\\/json(?:;\\s*charset=utf-8)?$/i);\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Réponse contient un message et l'élément supprimé avec des liens HATEOAS\", function () {\r",
+							"        const jsonData = pm.response.json();\r",
+							"        pm.expect(jsonData).to.have.property(\"message\", \"Item supprimé\");\r",
+							"        pm.expect(jsonData).to.have.property(\"deletedItem\");\r",
+							"        pm.expect(jsonData.deletedItem).to.have.property(\"links\");\r",
+							"    });\r",
+							"} else if (pm.response.code === 404) {\r",
+							"    pm.test(\"Message d'erreur Item non trouvé\", function () {\r",
+							"        pm.expect(pm.response.text()).to.equal(\"Item non trouvé\");\r",
+							"    });\r",
+							"} else if (pm.response.code === 500) {\r",
+							"    pm.test(\"Message d'erreur lors de l'écriture du fichier de données\", function () {\r",
+							"        pm.expect(pm.response.text()).to.equal(\"Erreur lors de l'écriture du fichier de données\");\r",
+							"    });\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url_base}}/liste_epicerie/0",
+					"host": [
+						"{{url_base}}"
+					],
+					"path": [
+						"liste_epicerie",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/liste_epicerie",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Statut de réponse 201 Créé ou 500 Erreur interne du serveur\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([201, 500]);\r",
+							"});\r",
+							"\r",
+							"if (pm.response.code === 201) {\r",
+							"    pm.test(\"Type de contenu est application/json\", function () {\r",
+							"        pm.response.to.have.header(\"Content-Type\");\r",
+							"        pm.expect(pm.response.headers.get(\"Content-Type\")).to.match(/^application\\/json(?:;\\s*charset=utf-8)?$/i);\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Réponse contient l'élément ajouté avec des liens HATEOAS\", function () {\r",
+							"        const jsonData = pm.response.json();\r",
+							"        pm.expect(jsonData).to.have.property(\"item\");\r",
+							"        pm.expect(jsonData.item).to.equal(pm.variables.get(\"randomItemName\"));\r",
+							"        pm.expect(jsonData).to.have.property(\"links\");\r",
+							"    });\r",
+							"\r",
+							"    // Stocker l'ID du dernier élément créé\r",
+							"    const lastCreatedItemId = pm.response.json().item.id;\r",
+							"    pm.variables.set(\"lastCreatedItemId\", lastCreatedItemId);\r",
+							"    } else if (pm.response.code === 500) {\r",
+							"        pm.test(\"Message d'erreur lors de l'écriture du fichier de données\", function () {\r",
+							"            pm.expect(pm.response.text()).to.equal(\"Erreur lors de l'écriture du fichier de données\");\r",
+							"        });\r",
+							"    }\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const fruitsAndVegetables = [\r",
+							"  \"Pomme\",\r",
+							"  \"Banane\",\r",
+							"  \"Orange\",\r",
+							"  \"Poire\",\r",
+							"  \"Tomate\",\r",
+							"  \"Carotte\",\r",
+							"  \"Brocoli\",\r",
+							"  \"Chou-fleur\",\r",
+							"  \"Concombre\",\r",
+							"  \"Courgette\"\r",
+							"];\r",
+							"\r",
+							"const randomIndex = Math.floor(Math.random() * fruitsAndVegetables.length);\r",
+							"const randomItemName = fruitsAndVegetables[randomIndex];\r",
+							"pm.variables.set(\"randomItemName\", randomItemName);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"item\": \"{{randomItemName}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url_base}}/liste_epicerie",
+					"host": [
+						"{{url_base}}"
+					],
+					"path": [
+						"liste_epicerie"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
