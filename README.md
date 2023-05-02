@@ -6,4 +6,4 @@ npm start
 cd .\backend\
 node index.js
 # Auteur: Vladyslav Gagné (Cégep Garneau)
-Postman a été utilisé pour les test d'Api Hateoas ( la collection et environement dans repo)
+Postman a été utilisé pour les tests d'Api Hateoas ( la collection et environement dans repo)
